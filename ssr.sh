@@ -1507,6 +1507,7 @@ echo && stty erase '^H' && read -p "请输入数字 [0-15]：" num
 case "$num" in
 	0)
 	Install_SSR_DEFAULT
+	;;
 	1)
 	Install_SSR
 	;;
