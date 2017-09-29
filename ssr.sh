@@ -482,19 +482,17 @@ Set_config_default_all(){
 	#Set_config_password
 	ssr_password="Ge-cc123.ms.com"
 	#Set_config_method 默认chacha20
-	ssr_method="15"
+	ssr_method="chacha20"
 	#Set_config_protocol auth_sha1_v4 兼容ss
-	ssr_protocol="2"
-	ssr_protocol_yn="y"
+	ssr_protocol="auth_sha1_v4_compatible"
 	#Set_config_obfs tls1.2_ticket_auth 兼容ss
-	ssr_obfs="5"
-	ssr_obfs_yn="y"
+	ssr_obfs="tls1.2_ticket_auth_compatible"
 	#Set_config_protocol_param
 	ssr_protocol_param="2048"
 	#Set_config_speed_limit_per_con
-	ssr_speed_limit_per_con=2048
+	ssr_speed_limit_per_con=4096
 	#Set_config_speed_limit_per_user
-	ssr_speed_limit_per_user=2048
+	ssr_speed_limit_per_user=4096
 }
 
 # 修改 配置信息
@@ -729,6 +727,8 @@ Install_SSR_DEFAULT(){
 	Save_iptables
 	echo -e "${Info} 所有步骤 安装完毕，开始启动 ShadowsocksR服务端..."
 	Start_SSR
+	echo -e "${Info} 显示用户信息..."
+	View_User
 }
 
 Update_SSR(){
@@ -1438,7 +1438,7 @@ Set_config_connect_verbose_info(){
 Update_Shell(){
 	echo -e "当前版本为 [ ${sh_ver} ]，开始检测最新版本..."
 	sh_new_ver=$(wget --no-check-certificate -qO- "https://softs.fun/Bash/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="softs"
-	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
+	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/agong1/bash/master/ssr.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 检测最新版本失败 !" && exit 0
 	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 		echo -e "发现新版本[ ${sh_new_ver} ]，是否更新？[Y/n]"
@@ -1448,7 +1448,7 @@ Update_Shell(){
 			if [[ $sh_new_type == "softs" ]]; then
 				wget -N --no-check-certificate https://softs.fun/Bash/ssr.sh && chmod +x ssr.sh
 			else
-				wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh && chmod +x ssr.sh
+				wget -N --no-check-certificate https://raw.githubusercontent.com/agong1/bash/master/ssr.sh && chmod +x ssr.sh
 			fi
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !"
 		else
