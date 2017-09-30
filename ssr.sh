@@ -730,7 +730,20 @@ Install_SSR_DEFAULT(){
 	echo -e "${Info} 显示用户信息..."
 	View_User
 }
+#更新DDNS
+Update_Dynu_DDNS(){
+        echo "请输入dynu账号的密码"
+        stty erase '^H' && read -p "(默认: 123456):" dynu_password
+        [[ -z "${dynu_password}" ]] && dynu_password="123456"
 
+	#更新ddns
+	rm -rf /tmp/log.txt && touch /tmp/log.txt
+	wget -O /tmp/log.txt http://api.dynu.com/nic/update?hostname=whucecil.myddns.rocks\&username=whucecil\&password=${dynu_password} --continue --no-check-certificate
+	
+	#显示更新结果
+	res=`cat /tmp/log.txt`
+	echo -e " 执行DDNS(${Red_font_prefix}whucecil.myddns.rocks${Font_color_suffix})>结果 : ${res}"
+}
 Update_SSR(){
 	SSR_installation_status
 	echo -e "因破娃暂停更新ShadowsocksR服务端，所以此功能临时禁用。"
@@ -1501,9 +1514,10 @@ echo -e "  ShadowsocksR 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_
 ————————————
  ${Green_font_prefix}14.${Font_color_suffix} 其他功能
  ${Green_font_prefix}15.${Font_color_suffix} 升级脚本
+ ${Green_font_prefix}16.${Font_color_suffix} 更新DDNS
  "
 menu_status
-echo && stty erase '^H' && read -p "请输入数字 [0-15]：" num
+echo && stty erase '^H' && read -p "请输入数字 [0-16]：" num
 case "$num" in
 	0)
 	Install_SSR_DEFAULT
@@ -1553,7 +1567,10 @@ case "$num" in
 	15)
 	Update_Shell
 	;;
+	16）
+	Update_Dynu_DDNS
+	;;
 	*)
-	echo -e "${Error} 请输入正确的数字 [1-15]"
+	echo -e "${Error} 请输入正确的数字 [1-16]"
 	;;
 esac
