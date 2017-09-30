@@ -5,12 +5,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 6+/Debian 6+/Ubuntu 14.04+
 #	Description: Install the ShadowsocksR server
-#	Version: 2.0.32
+#	Version: 2.0.33
 #	Author: Toyo
 #	Blog: https://doub.io/ss-jc42/
 #=================================================
 
-sh_ver="2.0.32"
+sh_ver="2.0.33"
 filepath=$(cd "$(dirname "$0")"; pwd)
 file=$(echo -e "${filepath}"|awk -F "$0" '{print $1}')
 ssr_folder="/usr/local/shadowsocksr"
@@ -711,6 +711,8 @@ Install_SSR_DEFAULT(){
 	Set_config_default_all
 	echo -e "${Info} 开始安装/配置 ShadowsocksR依赖..."
 	Installation_dependency
+	echo -e "${Info} 开始安装/配置 chacha20依赖的libsodium ..."
+	Install_Libsodium
 	echo -e "${Info} 开始下载/安装 ShadowsocksR文件..."
 	Download_SSR
 	echo -e "${Info} 开始下载/安装 ShadowsocksR服务脚本(init)..."
@@ -1567,7 +1569,7 @@ case "$num" in
 	15)
 	Update_Shell
 	;;
-	16）
+	16)
 	Update_Dynu_DDNS
 	;;
 	*)
